@@ -43,4 +43,10 @@ until(sum((newTheta - oldTheta) < .00001*ones(rows(oldTheta), 1)) == columns(dat
 endwhile
 
 
-function [jVal, gradient] = costFunction(theta)
+function costFunction(X, y, theta)
+
+	h = (1 / (1 + exp(theta' * X)))
+	
+	
+endfunction
+	
