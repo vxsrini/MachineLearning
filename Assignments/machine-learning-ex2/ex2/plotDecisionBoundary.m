@@ -9,8 +9,8 @@ function plotDecisionBoundary(theta, X, y)
 %   2) MxN, N>3 matrix, where the first column is all-ones
 
 % Plot Data
-plotData(X(:,2:3), y);
-hold on
+%plotData(X(:,2:3), y);
+%hold on
 
 if size(X, 2) <= 3
     % Only need 2 points to define a line, so choose two endpoints
@@ -41,7 +41,9 @@ else
 
     % Plot z = 0
     % Notice you need to specify the range [0, 0]
-    contour(u, v, z, [0, 0], 'LineWidth', 2)
+    z = round(1 ./ (1 + exp( -1 * z)))
+    surf(u, v, z)
+    %contour(u, v, z, [0, 0], 'LineWidth', 2)
 end
 hold off
 
