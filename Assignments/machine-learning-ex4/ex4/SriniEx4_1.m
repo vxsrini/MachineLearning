@@ -21,6 +21,11 @@ for i = 1:rows(X)
 	yMat(y(i)) = 1; 
 
 	cost = cost + ( ((-1 * yMat)' * ( log(l3))) - ((1 - yMat)' * (log(1 - l3)))) % 1x10 * 10x1
+
+
+	sumTheta = sum(sum(Theta1.^2)) + sum(sum(Theta2.^2));
 endfor
 
 finalCost = (1/rows(X)) * (cost)
+lambda = 1
+rCost = finalCost + (lambda/(2*rows(X))) * (sumTheta)
