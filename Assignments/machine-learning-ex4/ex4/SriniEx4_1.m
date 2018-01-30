@@ -29,3 +29,5 @@ endfor
 finalCost = (1/rows(X)) * (cost)
 lambda = 1
 rCost = finalCost + (lambda/(2*rows(X))) * (sumTheta)
+
+
