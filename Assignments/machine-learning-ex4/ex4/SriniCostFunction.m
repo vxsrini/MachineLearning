@@ -29,8 +29,8 @@ function [jVal, gradient] =  SriniCostFunction(unRInitTheta, sl, slPlus1, fSl, X
 	endfor
 
 	%%% compute cost
-	cost = sum(sum(((-1 * yMat)' * ( log(a3))) - ((1 - yMat)' * (log(1 - a3))))); %%%%  10x5000 * 5000x10
-        sumTheta = sum(sum(Theta1.^2)) + sum(sum(Theta2.^2));
+	cost = sum(sum(((-1 * yMat) .* ( log(a3))) - ((1 - yMat) .* (log(1 - a3))))); %%%%  10x5000 * 5000x10
+	sumTheta = sum(sum(Theta1(:, 2:end).^2)) + sum(sum(Theta2(:, 2:end).^2));
 	finalCost = (1/rows(X)) * (cost)
 	jVal = finalCost + (lambda/(2*rows(X))) * (sumTheta)
 
@@ -47,7 +47,6 @@ function [jVal, gradient] =  SriniCostFunction(unRInitTheta, sl, slPlus1, fSl, X
 	D1 = (1/rows(X)) * (del1(2:end,:) + (lambda .* regTheta1));
 
 	gradient = [D1(:); D2(:)];
-
 
 endfunction
 
