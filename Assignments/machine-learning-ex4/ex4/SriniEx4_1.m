@@ -6,28 +6,28 @@ X = [ones(rows(X), 1) X];
 %size(Theta1) 25x401
 %size(Theta2) 10x26
 size(y)
+
 cost = 0;
+sl = 400;
+slPlus1 = 25;
+fSl = 10;
+lambda = 1;
+INIT_EPSILON = 0.11868;
 
-for i = 1:rows(X)
-	l2 = Theta1 * X(i, :)'; %%% 25x1;
-	l2 = (1 ./ (1 + exp(-1 .* l2)));
-	l2 = [1; l2];
+initialTheta1 = rand(slPlus1, sl + 1)*(2*INIT_EPSILON) - INIT_EPSILON;
+initialTheta2 = rand(fSl, slPlus1 + 1)*(2*INIT_EPSILON) - INIT_EPSILON;
 
-	l3 = Theta2 * l2; %%% (10x26) * (26x1) = 10x1
-	l3 = (1 ./ (1 + exp(-1 .* l3))); %%% 10x1
+fprintf("Main -> Size of initial Theta1 = [%dx%d]\n", size(initialTheta1));
+fprintf("Main -> Size of initial Theta2 = [%dx%d]\n", size(initialTheta2));
 
-	
-	yMat = zeros(10, 1); % 10x1
-	yMat(y(i)) = 1; 
+fprintf("Main -> Size of initial initialTheta1 = [%dx%d]\n", size(initialTheta1(:)));
 
-	cost = cost + ( ((-1 * yMat)' * ( log(l3))) - ((1 - yMat)' * (log(1 - l3)))) % 1x10 * 10x1
+unRInitTheta = [initialTheta1(:); initialTheta2(:)];
+fprintf("Main -> Size of unRInitTheta = [%dx%d]\n", size(unRInitTheta(:)));
 
+options = optimset('GradObj', 'on', 'MaxIter', 400);
+[jVal, unRFinalTheta] = fminunc(@(t)(SriniCostFunction(t, sl, slPlus1, fSl, X, y, lambda)), unRInitTheta, options);
 
-	sumTheta = sum(sum(Theta1.^2)) + sum(sum(Theta2.^2));
-endfor
+%[jVal, unRFinalTheta] = fminunc((@p)(SriniCostFunction(p, sl, slPlus1, fSl, X, y, lambda)), unRInitTheta, options);
 
-finalCost = (1/rows(X)) * (cost)
-lambda = 1
-rCost = finalCost + (lambda/(2*rows(X))) * (sumTheta)
-
-
+%jVal;

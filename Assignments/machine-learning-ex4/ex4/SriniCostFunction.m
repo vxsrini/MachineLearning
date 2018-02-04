@@ -1,16 +1,17 @@
-function [jVal, gradient] =  costFunction__reg_1(Theta1, Theta2, X, y, lambda)
+function [jVal, gradient] =  SriniCostFunction(unRInitTheta, sl, slPlus1, fSl, X, y, lambda)
 
-	%load('ex4data1.mat');
-	%load('ex4weights.mat');
-	
-	%X = [ones(rows(X), 1) X];
-	%size(X) 5000x401
-	%size(Theta1) 25x401
-	%size(Theta2) 10x26
-	size(y)
+	Theta1 = reshape(unRInitTheta(1:(sl+1)*slPlus1, :), slPlus1, sl+1);
+	Theta2 = reshape(unRInitTheta((((sl+1)*slPlus1)+1):end, :), fSl, slPlus1+1); 
+
+	fprintf("CostFunction -> Size of rolled Theta1 = [%dx%d]\n", size(Theta1)); 
+	fprintf("CostFunction -> Size of rolled Theta2 = [%dx%d]\n", size(Theta2));
+	fprintf("CostFunction -> Size of y = [%dx%d]\n", size(y)); 
 
 	regTheta1 = [zeros(rows(Theta1), 1) Theta1(:, 2:end)];
 	regTheta2 = [zeros(rows(Theta2), 1) Theta2(:, 2:end)];
+
+	fprintf("CostFunction -> Size of regTheta1 = [%dx%d]\n", size(regTheta1));
+	fprintf("CostFunction -> Size of regTheta2 = [%dx%d]\n", size(regTheta2)); 
 	
 	%%%% Forward propogation, compute a2, a3
 
@@ -35,16 +36,17 @@ function [jVal, gradient] =  costFunction__reg_1(Theta1, Theta2, X, y, lambda)
 
 
 	
+	%%%% partial derivites of jVal
 	d3 = a3 - yMat; %%5000x10
-	d2 = (d3 * Theta2) .* (a2 .* (1-a2)) %%%% 50000x10 * 10x26 .* 50000x26 = 5000x26
+	d2 = (d3 * Theta2) .* (a2 .* (1-a2)); %%%% 50000x10 * 10x26 .* 50000x26 = 5000x26
 	
 	del2 = (d3' * a2); %%% 10x5000 5000x26  
 	del1 = (d2' * X); %%% 26x5000 5000x401
 
 	D2 = (1/rows(X)) * (del2 + (lambda .* regTheta2));
-	D1 = (1/rows(X)) * (del3 + (lambda .* regTheta1));
+	D1 = (1/rows(X)) * (del1(2:end,:) + (lambda .* regTheta1));
 
-	gradient = [D1(:), D2(:)]
+	gradient = [D1(:); D2(:)];
 
 
 endfunction
